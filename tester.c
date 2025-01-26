@@ -11,14 +11,16 @@ void tr2(void){
 void tr3(void){
     printf(1,"I AM ALIVE");
 }
-void * tr4(void* c){
+void tr4(void* c){
     int sleep_time = *(int*)c; // Cast the void* to an int* and then dereference
     *(int *)c= *(int *)c+50;
     sleep(sleep_time);
     
-    printf(1,"AM ALIVE");
+    // printf(1,"AM ALIVE");
     // return;
     // sleep(600000);
+    return ;
+
 }
 void tr5(void){
     printf(1,"I AM ALIVE");
