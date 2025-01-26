@@ -120,7 +120,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-int             clone(void(*entry)(void),void* stack);
+int             clone(void(*entry)(void *),void* stack);
 
 
 // swtch.S

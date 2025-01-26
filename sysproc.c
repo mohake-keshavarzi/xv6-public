@@ -19,7 +19,7 @@ sys_thread_create(void)
   int func,arg;
   if(argint(0, &func) < 0 || argint(1, &arg)<0)
     return -1;
-  return clone((void(*)(void))func,(void *)arg);
+  return clone((void(*)(void *))func,(void *)arg);
   // return 0;
 }
 

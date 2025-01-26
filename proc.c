@@ -222,7 +222,7 @@ fork(void)
 }
 
 int             
-clone(void(*entry)(void),void* stack){
+clone(void(*entry)(void *),void* arg){
   struct proc *np;
   struct proc *curproc = myproc();
 
@@ -241,13 +241,21 @@ clone(void(*entry)(void),void* stack){
   
     // Push argument onto stack
   // sp -= sizeof(void *);
-  // sp -= sp%16;
-  // copyout(np->pgdir, sp, (char *)&arg, sizeof(void *));
+  // // sp -= sp%16;
+  // copyout(np->pgdir, sp, (void *)arg, sizeof(void *));
   // int blank = 0xFFFFFFF;
   // sp -= sizeof(blank);
   // sp -= sp%16;
   // copyout(np->pgdir,sp, (char *)&blank, sizeof(blank));
+  uint stack_args[2];
+  stack_args[0] = (uint)0xffffffff;   // 4 bytes fake instruction pointer  
+  stack_args[1] = (uint)arg;         // 4 bytes of the argument pointer 
+  
+  // point the sp to the child stack
+  sp -= 2 * 4;
 
+  // add the return address and argument pointer on the stack 
+  copyout(np->pgdir, sp, stack_args, 2 * sizeof(uint));
   // Push fake return address to the stack of thread
   
   // Put address of new stack in the stack pointer (ESP)
