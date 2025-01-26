@@ -63,6 +63,15 @@ exec(char *path, char **argv)
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
   sz = PGROUNDUP(sz);
+
+  for(int i=0;i<NSUBPROCPERPROC;i++){
+      if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
+        goto bad;
+      clearpteu(pgdir, (char*)(sz - 2*PGSIZE));
+      sp = sz;
+      curproc->sub_stacks[i]=sp;
+  }
+
   if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
     goto bad;
   clearpteu(pgdir, (char*)(sz - 2*PGSIZE));

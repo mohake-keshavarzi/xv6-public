@@ -248,12 +248,9 @@ clone(void(*entry)(void),void* stack){
   // sp -= sp%16;
   // copyout(np->pgdir,sp, (char *)&blank, sizeof(blank));
 
-   // Push fake return address to the stack of thread
-  void* sret = stack + PGSIZE - 1 * sizeof(void *);
-  *(uint*)sret = 0xFFFFFFF;
-
+  // Push fake return address to the stack of thread
+  
   // Put address of new stack in the stack pointer (ESP)
-  np->tf->esp = (uint)stack + PGSIZE - 1 * sizeof(void *);
 
   np->tf->eip = (uint)entry;           // change instruction pointer for execution 
   np->tf->esp = sp;  
