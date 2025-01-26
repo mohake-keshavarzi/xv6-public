@@ -11,9 +11,11 @@ void tr2(void){
 void tr3(void){
     printf(1,"I AM ALIVE");
 }
-void tr4(void* c){
+void * tr4(void* c){
     int sleep_time = *(int*)c; // Cast the void* to an int* and then dereference
+    *(int *)c= *(int *)c+50;
     sleep(sleep_time);
+    
     printf(1,"AM ALIVE");
     // return;
     // sleep(600000);
@@ -57,7 +59,7 @@ main(int argc, char *argv[])
   printf(1,"I have a thread %d\n",tid);
   printf(1,"I have a thread %d\n",tid);
   printf(1,"I have a thread %d\n",tid);
-  printf(1,"I have a thread %d\n",tid);
+  printf(1,"I have a thread %d\n",a);
   
 
   exit();
