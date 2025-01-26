@@ -221,6 +221,55 @@ fork(void)
   return pid;
 }
 
+int             
+clone(void(*entry)(void),void* stack){
+  struct proc *np;
+  struct proc *curproc = myproc();
+
+  // Allocate process.
+  if((np = allocproc()) == 0){
+    return -1;
+  }
+  acquire(&ptable.lock);
+  safestrcpy(np->name, "SUB_PROC", sizeof(np->name));
+  // Copy process data to the new thread
+  np->pgdir = curproc->pgdir;
+  np->sz = curproc->sz;
+  np->parent = curproc;
+  *np->tf = *curproc->tf;
+  uint sp= curproc->sub_stacks[curproc->sub_proc_count];
+  
+    // Push argument onto stack
+  // sp -= sizeof(void *);
+  // sp -= sp%16;
+  // copyout(np->pgdir, sp, (char *)&arg, sizeof(void *));
+  // int blank = 0xFFFFFFF;
+  // sp -= sizeof(blank);
+  // sp -= sp%16;
+  // copyout(np->pgdir,sp, (char *)&blank, sizeof(blank));
+
+   // Push fake return address to the stack of thread
+  void* sret = stack + PGSIZE - 1 * sizeof(void *);
+  *(uint*)sret = 0xFFFFFFF;
+
+  // Put address of new stack in the stack pointer (ESP)
+  np->tf->esp = (uint)stack + PGSIZE - 1 * sizeof(void *);
+
+  np->tf->eip = (uint)entry;           // change instruction pointer for execution 
+  np->tf->esp = sp;  
+  np->tf->ebp = np->tf->esp;
+  np->tf->eax = 0;  // Return 0 to the new thread
+  
+  curproc->sub_procs[curproc->sub_proc_count]=np;
+  curproc->sub_proc_count++;
+
+  np->state=RUNNABLE;
+  release(&ptable.lock);
+
+  return np->pid;
+
+}
+
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.

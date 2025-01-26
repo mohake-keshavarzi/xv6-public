@@ -12,7 +12,8 @@ void tr3(void){
     printf(1,"I AM ALIVE");
 }
 void tr4(void){
-      printf(1,"I AM ALIVE");
+    int a=getpid();
+    printf(1,"AM ALIVE %d",a);
 }
 void tr5(void){
     printf(1,"I AM ALIVE");
@@ -25,11 +26,11 @@ main(int argc, char *argv[])
   // int i=0;
   getpid();
   printf(1,"Inside tester\n");
-  printf(1,"the func:%ld\n",(uint)tr);
-  printf(1,"the func:%ld\n",(uint)tr2);
-  printf(1,"the func:%ld\n",(uint)tr3);
-  printf(1,"the func:%ld\n",(uint)tr4);
-  printf(1,"the func:%ld\n",(uint)tr5);
+  printf(1,"the func:%d\n",(uint)tr);
+  printf(1,"the func:%d\n",(uint)tr2);
+  printf(1,"the func:%d\n",(uint)tr3);
+  printf(1,"the func:%d\n",(uint)tr4);
+  printf(1,"the func:%d\n",(uint)tr5);
 
   void * stack = malloc(4096);
   int tid=thread_create(tr4,stack);
