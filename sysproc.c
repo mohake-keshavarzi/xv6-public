@@ -14,6 +14,15 @@ sys_fork(void)
 }
 
 int
+sys_thread_create(void)
+{
+  int func,arg;
+  if(argint(0, &func) < 0 || argint(1, &arg)<0)
+    return -1;
+  return 0;
+}
+
+int
 sys_exit(void)
 {
   exit();
